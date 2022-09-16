@@ -16,14 +16,14 @@ router.post("/signup", async (req, res) => {
   const { name, email, password, confirm_password } = req.body;
 
   // condition to check whether all fields are filed or not
-  if (!name || !email || !password || !confirm_password) {
+  if (!name || !email || !password) {
     return res.status(401).send("All fields are required ");
   }
 
   // to check password and confirm password
-  if (password !== confirm_password) {
-    return res.status(401).send("password and confirm password did not match");
-  }
+  // if (password !== confirm_password) {
+  //   return res.status(401).send("password and confirm password did not match");
+  // }
 
   let isUserEmailAlreadyExist = await UserModel.findOne({ email: email });
 

@@ -31,8 +31,12 @@ const server = app.listen(process.env.PORT || 8000, () => {
 
 // routes import
 const authRoute = require("./route/auth_route");
+const questionRoute = require("./route/question_route");
+const quizRoute = require("./route/quiz_route");
 
 app.use("/auth", authRoute);
+app.use("/question", questionRoute);
+app.use("/quiz", quizRoute);
 
 // write middleware
 // to do: implement later

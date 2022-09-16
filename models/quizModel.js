@@ -1,23 +1,19 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema(
+const QuizSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
     },
-    email: {
+    topic: {
       type: String,
       required: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
-    quizzes: [
+    questions: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "quiz",
+        ref: "question",
       },
     ],
   },
@@ -26,4 +22,4 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("quiz", QuizSchema);
