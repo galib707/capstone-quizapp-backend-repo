@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const QuestionModel = require("../models/questionModel");
+const QuizModel = require("../models/quizModel");
 
 router.post("/setQuestion", async (req, res) => {
   const { question, topic, type, choices, correctAnswer } = req.body;
@@ -33,7 +34,7 @@ router.post("/setQuestion", async (req, res) => {
 
       return res
         .status(200)
-        .send(`New question has been added to the quiz ${saveNewQuestion._id}`);
+        .json(`New question has been added to the quiz ${saveNewQuestion._id}`);
     } catch (error) {
       return res.status(500).send(`ERROR: ${error}`);
     }

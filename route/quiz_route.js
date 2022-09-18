@@ -1,10 +1,13 @@
 const express = require("express");
 const QuizModel = require("../models/quizModel");
+const UserModel = require("../models/userModel");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { title, topic } = req.body;
-
+  const { title, topic, user_id } = req.body;
+  if (user_id === undefined) {
+    return res.status(400).send("A valid user id needed to set a quiz");
+  }
   if (!title || !topic) {
     return res.status(400).send("Quiz title and topic is required");
   } else {
@@ -15,6 +18,11 @@ router.post("/", async (req, res) => {
 
     try {
       const saveNewQuiz = await setNewQuiz.save();
+      const userData = await UserModel.updateOne(
+        { _id: user_id },
+        { $push: { quizzes: saveNewQuiz._id } }
+      );
+      console.log(userData);
 
       return res
         .status(200)

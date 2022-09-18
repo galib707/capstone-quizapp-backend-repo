@@ -66,7 +66,9 @@ router.post("/signin", async (req, res) => {
     return res.status(401).send("All fields are required ");
   }
 
-  let existingUser = await UserModel.findOne({ email: email });
+  let existingUser = await UserModel.findOne({ email: email }).populate({
+    path: "quizzes",
+  });
 
   console.log(existingUser);
   // if email does not exist let the user know that
@@ -85,8 +87,9 @@ router.post("/signin", async (req, res) => {
     }
 
     // generate rfresh token and access token
-    const { name, email } = existingUser;
-    let user_data = { name, email };
+    const { _id, name, email, quizzes } = existingUser;
+    console.log(existingUser);
+    let user_data = { _id, name, email, quizzes };
 
     const access_token = jwt.sign(user_data, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME,
