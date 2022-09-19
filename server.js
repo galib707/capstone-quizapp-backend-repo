@@ -4,13 +4,20 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
 const jwt = require("jsonwebtoken");
+const app = express();
+app.use(cors());
+// const io = require("socket.io");
 require("dotenv").config();
 
-const app = express();
-
 app.use(morgan("dev"));
-app.use(cors());
 app.use(express.json());
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
 mongoose
   .connect(process.env.DATABASE_URL, {
@@ -24,10 +31,21 @@ mongoose
     console.log(error);
   });
 
-const server = app.listen(process.env.PORT || 8000, () => {
+io.on("connection", (socket) => {
+  console.log("connected on", socket.id);
+  socket.on("create-room", (e) => {
+    socket.join(e, () => {
+      socket.emmit("next");
+    });
+  });
+});
+
+server.listen(process.env.PORT || 8000, () => {
   const port = server.address().port;
   console.log("express server is listening to port " + port);
 });
+
+//socket io server
 
 // routes import
 const authRoute = require("./route/auth_route");
