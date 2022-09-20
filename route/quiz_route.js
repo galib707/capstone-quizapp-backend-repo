@@ -22,13 +22,8 @@ router.post("/", async (req, res) => {
         { _id: user_id },
         { $push: { quizzes: saveNewQuiz._id } }
       );
-      console.log(userData);
 
-      return res
-        .status(200)
-        .send(
-          `New quiz has been created with id ${saveNewQuiz._id},${title} and ${topic}`
-        );
+      return res.status(200).send(saveNewQuiz._id);
     } catch (error) {
       res.status(500).send(`ERROR ${error}`);
     }

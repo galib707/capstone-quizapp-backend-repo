@@ -31,15 +31,6 @@ mongoose
     console.log(error);
   });
 
-io.on("connection", (socket) => {
-  console.log("connected on", socket.id);
-  socket.on("create-room", (e) => {
-    socket.join(e, () => {
-      socket.emmit("next");
-    });
-  });
-});
-
 server.listen(process.env.PORT || 8000, () => {
   const port = server.address().port;
   console.log("express server is listening to port " + port);
@@ -77,3 +68,12 @@ function authenticaitonMiddleWare(req, res, next) {
     next();
   } catch (error) {}
 }
+
+io.on("connection", (socket) => {
+  console.log("connected on", socket.id);
+  socket.on("create-room", (e) => {
+    socket.join(e, () => {
+      socket.emmit("next");
+    });
+  });
+});
